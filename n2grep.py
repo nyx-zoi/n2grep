@@ -24,6 +24,7 @@ Comments ignored:
     - ;
     - //
     - \"\"\" MULTILINE TEXT \"\"\"
+    - \'\'\' MULTILINE TEXT \'\'\'
     - /* MULTILINE TEXT */
 """
 
@@ -58,8 +59,14 @@ def fsearch(regex, sfile):
     """
     with open(sfile, 'r') as openfile:
 
+        # Create a constant for counting line numbers
+        linenumber = 0
+
         # Perform search function on each line
         for line in openfile:
+
+            # Increment Line number
+            linenumber += 1
 
             # Search for comments and blank lines
             # regex match: line starting with: ;, #, or // even if there are
@@ -79,7 +86,7 @@ def fsearch(regex, sfile):
                     if re.search(regex, line):
 
                         # Finally print result if matched
-                        print(line.strip('\n'))
+                        print("n{}: {}".format(linenumber, line.strip('\n')))
 
                 # If it is the end of the multi-line, then flip multi back
                 elif re.search(r' *\"\"\"| *\'\'\'| */\*| *\*/', line) and multi:
