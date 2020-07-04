@@ -7,17 +7,19 @@ empty lines.
 
 import sys
 import re
+import os
 
 helpstr = """
 n2grep [OPTION] ... PATTERN [FILE] ...
 Search through files using basic regular expressions while ignoring most types
 of comments.
+Each option must be seperate.
 Comments include both line and block based.
 
 Options:
   -p        Print all file contents except for contents
   --help    Print help menu
-  -R,-r     Recursively search through directories. Cannot be combined with '-p'
+  -R,-r     Recursively search through directories. Can be combined with '-p'
   
 Comments ignored:
     - #
@@ -57,6 +59,9 @@ def fsearch(regex, sfile):
     :param sfile: File to regex either though user input or recursion.
     :return: uncommented lines and positive regular expression results
     """
+    # Print filename
+    print(sfile)
+
     with open(sfile, 'r') as openfile:
 
         # Create a constant for counting line numbers
@@ -94,6 +99,29 @@ def fsearch(regex, sfile):
                     flip()
 
 
+def recursion(regex, pdir):
+    """
+    Creates a recursion function that performs a search on each individual file
+    as soon as it is found. Each file is added to the top of the search.
+    :param pdir: Parent directory (user input)
+    :param regex: Users regex
+    :return: Results from fsearch and filename
+    """
+    all_files = []
+
+    # Get all files and add to all_files
+    for rootdir, directories, files in os.walk(pdir):
+
+        for file in files:
+
+            all_files.append(os.path.join(rootdir, file))
+
+    # Perform regex on all flies
+    for file in all_files:
+
+        fsearch(regex, file)
+
+
 def main(argv):
     """
     Runs the user interface portion of the program including tests
@@ -109,10 +137,13 @@ def main(argv):
     # option and argument parsing
     if sys.argv[1] == "-R" or sys.argv[1] == "-r":
 
-        patern = sys.argv[2]
-        directory = sys.argv[3]
+        if sys.argv[2] == "-p":
 
-        print("RECURSIVE AINT DONE")
+            recursion(r'.*', sys.argv[3])
+
+        else:
+
+            recursion(sys.argv[2], sys.argv[3])
 
     elif sys.argv[1] == "--help":
 
@@ -121,7 +152,13 @@ def main(argv):
     elif sys.argv[1] == "-p":
 
         # Use a "match all" regex to read file conetents without comments
-        fsearch(r'.*', sys.argv[2])
+        if sys.argv[2] == "-R" or sys.argv[2] == "-r":
+
+            recursion(r'.*', sys.argv[3])
+
+        else:
+
+            fsearch(r'.*', sys.argv[2])
 
     else:
 
