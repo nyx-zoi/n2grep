@@ -129,13 +129,14 @@ def main(argv):
     :return: results of all other functions and final lines
     """
     # Test the number of arguments given (filename is considered an argument)
+    # If false, continue with argument parsing
     if len(sys.argv) >= 5 or len(sys.argv) == 1:
 
         print("WRONG NUMBER OF ARGUMENTS")
         print(helpstr)
 
     # option and argument parsing
-    if sys.argv[1] == "-R" or sys.argv[1] == "-r":
+    elif sys.argv[1] == "-R" or sys.argv[1] == "-r":
 
         if sys.argv[2] == "-p":
 
