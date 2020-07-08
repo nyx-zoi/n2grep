@@ -1,4 +1,4 @@
-#!/home/phate/anaconda3/bin/python3
+#!/bin/python3
 
 """
 This is a simple "egrep" variant that also ignores most comments and removes
