@@ -30,8 +30,13 @@ Comments ignored:
     - /* MULTILINE TEXT */
 """
 
-# Create a default state for variable
+# Create a default state for variables
 multi = False
+
+# Regex match for single and multiline comments
+# Update these variables to include other file formats
+singleline_regex = r'^ *;|^ *//|^ *#|^\s*$'
+multiline_regex = r' *\"\"\"| *\'\'\'| */\*| *\*/| \<\!\-\-| \-\-\>'
 
 
 def flip():
@@ -76,10 +81,10 @@ def fsearch(regex, sfile):
             # Search for comments and blank lines
             # regex match: line starting with: ;, #, or // even if there are
             # several spaces in the beginning. Also empty lines
-            if not re.search(r'^ *;|^ *//|^ *#|^\s*$', line):
+            if not re.search(singleline_regex, line):
 
                 # This removes multi-line comments by searching for tags
-                if re.search(r' *\"\"\"| *\'\'\'| */\*| *\*/', line) and not multi:
+                if re.search(multiline_regex, line) and not multi:
 
                     # If there is a multiline match and the value is False,
                     # flip the value of multi
@@ -94,7 +99,7 @@ def fsearch(regex, sfile):
                         print("n{}: {}".format(linenumber, line.strip('\n')))
 
                 # If it is the end of the multi-line, then flip multi back
-                elif re.search(r' *\"\"\"| *\'\'\'| */\*| *\*/', line) and multi:
+                elif re.search(multiline_regex, line) and multi:
 
                     flip()
 
