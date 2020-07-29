@@ -36,7 +36,7 @@ multi = False
 # Regex match for single and multiline comments
 # Update these variables to include other file formats
 singleline_regex = r'^ *;|^ *//|^ *#|^\s*$'
-multiline_regex = r' *\"\"\"| *\'\'\'| */\*| *\*/| \<\!\-\-| \-\-\>'
+multiline_regex = r' *\"\"\"| *\'\'\'| */\*| *\*/| *\<\!\-\-| *\-\-\>'
 
 
 def flip():
